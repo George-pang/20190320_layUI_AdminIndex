@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>layout 后台大布局 - Layui</title>
+    <link rel="stylesheet" href="lib/layui/css/layui.css">
+    <script src="lib/jquery/dist/jquery.js"></script>
+    <style>
+        .layui-header {
+            height: 60px;
+            background-color: #333c5c !important;
+        }
+
+        .layui-layout-admin .layui-logo {
+            color: #fff;
+            width: 400px;
+            font-size: 26px;
+            letter-spacing: 1px;
+            text-shadow: 0px 1px 0px #e5e5ee;
+        }
+
+        .layui-layout-left {
+            left: 400px;
+            height: 40px;
+            top: 20px;
+        }
+
+        .layui-nav .layui-nav-item {
+            line-height: 40px;
+        }
+
+        .layui-layout-left .layui-nav-item {
+            margin-right: 10px;
+        }
+
+        .layui-layout-left .layui-this {
+            background-color: #4E5465;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        .layui-layout-right {
+            height: 40px;
+            top: 0;
+        }
+
+        .layui-layout-right * {
+            font-size: 14px !important;
+        }
+
+        .layui-nav-img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .layui-layout-admin .layui-side {
+            top: 60px;
+        }
+
+        .layui-layout-admin .layui-body {
+            left: 160px;
+            top: 60px;
+            bottom: 10px;
+        }
+
+        /* .layui-bg-black {
+            background-color: #333c5c!important;
+        }
+        .layui-nav {
+            background-color: #333c5c;
+        } */
+
+        .layui-body>div {
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .indexFrame_box {
+            width: 100%;
+            height: 99%;
+            box-sizing: border-box;
+            /*border: none;*/
+        }
+
+        #indexFrame {
+            width: 100%;
+            height: 100%;
+        }
+
+        .layui-nav * {
+            /*菜单导航栏文字大小*/
+            font-size: 16px;
+        }
+
+        .layui-layout-admin .layui-side {
+            width: 140px;
+        }
+
+        .layui-nav-tree {
+            width: 140px;
+            padding: 0;
+        }
+
+        .layui-nav-tree .layui-nav-item a {
+            padding-left: 30px;
+        }
+
+        .layui-side-scroll {
+            width: 160px;
+        }
+
+        .layui-nav-tree .layui-nav-item {
+            margin-bottom: 10px;
+        }
+
+        .tip_txt {
+            display: inline-block;
+            *display: inline;
+            *zoom: 1;
+            vertical-align: middle;
+            line-height: 40px;
+            color: rgba(255, 255, 255, .7);
+        }
+    </style>
+</head>
+
+<body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <div class="layui-logo">朝阳120急救管理系统</div>
+            <!-- 头部区域（可配合layui已有的水平导航） -->
+            <ul class="layui-nav layui-layout-left">
+                <li id="M_BasicInfo" class="layui-nav-item"><a href="/M_BasicInfo/EventManage/EventInfoSearch" target="indexFrame">基础信息</a></li>
+                <li id="M_Scheduling" class="layui-nav-item"><a href="/M_Scheduling/FastScheduling/FastScheduling"
+                        target="indexFrame">排班管理</a></li>
+                <li id="M_KnowledgeManage" class="layui-nav-item"><a href="/M_KnowledgeManage/Danger/DangerPage" target="indexFrame">知识管理</a></li>
+                <li id="M_MajorIncidents" class="layui-nav-item"><a href="/M_MajorIncidents/Emergency/AccidentEvent"
+                        target="indexFrame">重大事故</a></li>
+                <li id="M_MedicalSecurity" class="layui-nav-item"><a href="/M_MedicalSecurity/MSRecord/MedicalSecurityList"
+                        target="indexFrame">医疗保障</a></li>
+                <li id="M_Statistics" class="layui-nav-item"><a href="/M_Statistics/Statistics/StatisticsList" target="indexFrame">统计信息</a></li>
+            </ul>
+            <ul class="layui-nav layui-layout-right">
+                <span class="tip_txt">当前用户：</span>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">
+                        <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                        管理员
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">基本资料</a></dd>
+                        <dd><a href="">修改密码</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="">退出</a></li>
+            </ul>
+        </div>
+
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                </ul>
+            </div>
+        </div>
+
+        <div class="layui-body">
+            <!-- 内容主体区域 -->
+            <div style="padding: 15px;">
+                <div class="indexFrame_box">
+                    <iframe id="indexFrame" frameborder="0" name="indexFrame"></iframe>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="lib/layui/layui.js"></script>
+    <script>
+        //JavaScript代码区域
+        //jq入口函数
+        $(function () {
+            layui.use('element', function () { //加载layUI所需模块---element模块
+                var element = layui.element; //返回element模块的实例
+
+                /*
+                    头部导航点击时远程动态加载左侧导航列表数据并动态渲染
+                */
+                //本地模拟数据
+                var data1 = [{
+                        href: "/M_BasicInfo/EventManage/EventInfoSearch",
+                        name: "事件管理"
+                    },
+                    {
+                        href: "/M_BasicInfo/DepatureInfo/DepatureInfoSearch",
+                        name: "出车信息"
+                    },
+                    {
+                        href: "/M_BasicInfo/VehicleOnAndOff/VehicleOFInfo",
+                        name: "车辆上下班"
+                    },
+                    {
+                        href: "/M_BasicInfo/PauseCall/PauseCallSearch",
+                        name: "暂停调用"
+                    },
+                ];
+                var data2 = [{
+                        href: "/M_Scheduling/FastScheduling/FastScheduling",
+                        name: "快速排班"
+                    },
+                    {
+                        href: "/M_Scheduling/SchedulingList/SchedulingList",
+                        name: "排班历史"
+                    },
+                    {
+                        href: "/M_Scheduling/SchedulingBasisList/SchedulingBasisList",
+                        name: "排班基础"
+                    },
+                    {
+                        href: "/M_Scheduling/SchedulingQuery/SchedulingQuery",
+                        name: "排班查询"
+                    },
+                ];
+                var data3 = [{
+                        href: "/M_KnowledgeManage/Danger/DangerPage",
+                        name: "化学常识"
+                    },
+                    {
+                        href: "/M_KnowledgeManage/Poison/PoisonPage",
+                        name: "毒品常识"
+                    },
+                    {
+                        href: "/M_KnowledgeManage/CureRule/CureRulePage",
+                        name: "应急处理"
+                    },
+                    {
+                        href: "/M_KnowledgeManage/Scheme/SchemePage",
+                        name: "应急预案"
+                    },
+                ];
+                var data4 = [{
+                        href: "/M_MajorIncidents/Emergency/AccidentEvent",
+                        name: "突发事件"
+                    },
+                    {
+                        href: "/M_MajorIncidents/MuLuYangBiao/GetEmergencyPrintList",
+                        name: "目录样表"
+                    },
+                ];
+                var data5 = [{
+                        href: "/M_MedicalSecurity/MSRecord/MedicalSecurityList",
+                        name: "保障记录"
+                    },
+                    {
+                        href: "/M_MedicalSecurity/MSFastScheduling/MSFastScheduling",
+                        name: "快速排班"
+                    },
+                    {
+                        href: "/M_MedicalSecurity/MSSchedulingList/MSSchedulingList",
+                        name: "排班历史"
+                    },
+                    {
+                        href: "/M_MedicalSecurity/MSSchedulingQuery/MSSchedulingQuery",
+                        name: "排班查询"
+                    },
+                    {
+                        href: "/M_MedicalSecurity/MSStatistics/MedicalSecurityTJ",
+                        name: "保障统计"
+                    },
+                ];
+                var data6 = [{
+                        href: "/M_Statistics/Statistics/StatisticsList",
+                        name: "调度科统计"
+                    },
+                    {
+                        href: "/M_Statistics/Statistics/StatisticsList",
+                        name: "公示内容"
+                    },
+                    {
+                        href: "/M_Statistics/Statistics/StatisticsList",
+                        name: "质控统计"
+                    },
+                    {
+                        href: "/M_Statistics/Statistics/StatisticsList",
+                        name: "突发事件统计"
+                    },
+                    {
+                        href: "/M_Statistics/Statistics/StatisticsList",
+                        name: "绿色通道统计"
+                    },
+                    {
+                        href: "/M_Statistics/Statistics/StatisticsList",
+                        name: "自动呼救统计"
+                    },
+                    {
+                        href: "/M_Statistics/Statistics/StatisticsList",
+                        name: "CO中毒统计"
+                    },
+                    {
+                        href: "/M_Statistics/Statistics/StatisticsList",
+                        name: "公共卫生统计"
+                    },
+                    {
+                        href: "/M_Statistics/Statistics/StatisticsList",
+                        name: "医疗保障统计"
+                    },
+                    {
+                        href: "/M_Statistics/Statistics/StatisticsList",
+                        name: "图表统计"
+                    },
+                ];
+
+                //头部导航点击事件触发时，动态渲染根据接收数据动态渲染左侧tab列表
+                $(".layui-layout-left").find(".layui-nav-item").on("click", function () {
+                    var id = $(this).attr("id"); //参数
+                    var data = getLeftMenuData(id); //获取左侧tab菜单数据
+                    renderLeftMenu(data); //动态渲染左侧tab菜单
+
+                    element.render(); //动态生成HTML时，element的相关功能将不会对其有效，需要重新手动更新渲染
+                });
+
+
+                /*
+                    页面加载后内联页初始加载第一个信息模块下第一个tab导航的网页---事件管理页
+                */
+                $($(".layui-layout-left").find(".layui-nav-item")[0]).addClass("layui-this"); //显示头部导航及左侧导航当前tab
+                $($(".layui-layout-left").find(".layui-nav-item")[0]).trigger("click"); //触发第一个头部导航tab的点击事件加载左侧tab菜单
+                $($(".layui-nav-tree").find(".layui-nav-item")[0]).addClass("layui-this");
+                //获取当前tab下的url，赋给inframe
+                var src = $($(".layui-nav-tree").find(".layui-nav-item")[0]).find("a").attr("href");
+                $("#indexFrame").attr("src", src);
+
+
+
+                //function:本地模拟后台ajax请求传参动态返回左侧菜单数据
+                function getLeftMenuData(id) {
+                    var data;
+                    switch (id) {
+                        case "M_BasicInfo":
+                            data = data1;
+                            break;
+                        case "M_Scheduling":
+                            data = data2;
+                            break;
+                        case "M_KnowledgeManage":
+                            data = data3;
+                            break;
+                        case "M_MajorIncidents":
+                            data = data4;
+                            break;
+                        case "M_MedicalSecurity":
+                            data = data5;
+                            break;
+                        case "M_Statistics":
+                            data = data6;
+                            break;
+                        default:
+                            data = null;
+                            break;
+                    }
+                    return data;
+                }
+
+                //function:解析数据，动态渲染左侧tab菜单
+                function renderLeftMenu(data) {
+                    var ulObj = $(".layui-nav-tree");
+                    ulObj.empty(); //清空子节点
+                    for (var i = 0; i < data.length; i++) {
+                        var liStr = '<li class="layui-nav-item"><a href="' + data[i].href +
+                            '" target="indexFrame">' + data[i].name + '</a></li>'
+                        var liObj = $(liStr); //动态创建li元素
+                        ulObj.append(liObj); //插入到DOM
+                    }
+                    $(ulObj.find(".layui-nav-item")[0]).addClass("layui-this"); //左侧tab菜单默认第一个选中
+
+                }
+
+            });
+        });
+    </script>
+</body>
+
+</html>
